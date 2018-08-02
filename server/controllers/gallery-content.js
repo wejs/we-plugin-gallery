@@ -31,6 +31,11 @@ module.exports = {
 
       res.locals.gallery = gallery;
 
+      res.locals.query.order = [
+        ['weight', 'DESC'],
+        ['id', 'DESC']
+      ];
+
       return res.locals.Model
       .findAndCountAll(res.locals.query)
       .then(function afterFindAndCount (record) {
