@@ -1,0 +1,20 @@
+{
+  "name": "we-plugin-gallery",
+  "description": "We.js video and image gallery plugin",
+  "version": "0.0.1",
+  "main": "plugin.js",
+  "repository": "wejs/we-plugin-gallery",
+  "keywords": [
+    "wejs-plugin"
+  ],
+  "author": "Alberto Souza <contato@albertosouza.net>",
+  "license": "MIT",
+  "wejs": {
+    "dependencies": {
+      "we-plugin-file": true
+    }
+  },
+  "dependencies": {
+    "js-video-url-parser": "^0.2.7"
+  }
+}

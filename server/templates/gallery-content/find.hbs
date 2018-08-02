@@ -1,0 +1,48 @@
+<ol class="breadcrumb">
+  <li><a href="/">Início</a></li>
+  <li><a href="/gallery">Galerias</a></li>
+  <li class="active">Galeria {{gallery.name}}</li>
+</ol>
+
+<h1 class="gallery-name">Galeria {{gallery.name}}</h1>
+
+<div id="GalleryContents" class="gallery-contents row fancybox-galery">
+  {{#each data}}
+    {{#ifCond type 'image'}}
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <div class="gallery-content">
+          {{#each image}}
+            <a class="gallery-item fancybox"
+              rel="g{{../gallery.id}}"
+              href="{{urls.original}}"
+              style="background: url({{urls.original}}); background-repeat: no-repeat; background-size: cover; display: block; width: 100%; height: 220px;"
+            >
+              {{we-image this 'original' class="img-thumbnail  sr-only"}}
+            </a>
+          {{/each}}
+        </div>
+      </div>
+    {{/ifCond}}
+    {{#ifCond type 'video'}}
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <div class="gallery-content">
+          <div class="gallery-content-video">
+            <a
+              class="gallery-item fancybox fancybox.iframe" rel="g{{../gallery.id}}"
+              href="{{videoUrl}}"
+              style="background: url({{videoThumbnailUrl}}); background-repeat: no-repeat; background-size: cover; display: block; width: 100%; height: 220px;"
+            >
+              <img src="{{videoThumbnailUrl}}" class="img-thumbnail sr-only">
+            </a>
+          </div>
+        </div>
+      </div>
+    {{/ifCond}}
+  {{/each}}
+
+  <script>$(function(){ $("#GalleryContents a").fancybox(); });</script>
+</div>
+
+<div class="gallery-pagination">
+  {{paginate count=metadata.count limit=query.limit currentPage=query.page req=req}}
+</div>
