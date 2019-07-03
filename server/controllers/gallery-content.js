@@ -25,25 +25,20 @@ module.exports = {
       }
     }
 
-    models.gallery.findById(req.query.galleryId)
-    .then( (gallery)=> {
-      if (!gallery) return res.notFound();
+    if (!res.locals.gallery) return res.notFound();
 
-      res.locals.gallery = gallery;
+    res.locals.query.order = [
+      ['weight', 'DESC'],
+      ['id', 'DESC']
+    ];
 
-      res.locals.query.order = [
-        ['weight', 'DESC'],
-        ['id', 'DESC']
-      ];
-
-      return res.locals.Model
-      .findAndCountAll(res.locals.query)
-      .then(function afterFindAndCount (record) {
-        res.locals.metadata.count = record.count;
-        res.locals.data = record.rows;
-        res.ok();
-        return null;
-      });
+    return res.locals.Model
+    .findAndCountAll(res.locals.query)
+    .then(function afterFindAndCount (record) {
+      res.locals.metadata.count = record.count;
+      res.locals.data = record.rows;
+      res.ok();
+      return null;
     })
     .catch(res.queryError);
   },

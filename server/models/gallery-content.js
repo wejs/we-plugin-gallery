@@ -53,6 +53,60 @@ module.exports = function(we) {
         image: { formFieldMultiple: false }
       },
 
+      classMethods: {
+        /**
+         * Context loader, preload current request record and related data
+         *
+         * @param  {Object}   req  express.js request
+         * @param  {Object}   res  express.js response
+         * @param  {Function} done callback
+         */
+        contextLoader(req, res, done) {
+          this.preloadGalleryRecord(req, res, (err)=> {
+            if (err) return done(err);
+
+            if (!res.locals.id || !res.locals.loadCurrentRecord) {
+              return done();
+            }
+
+            return this.findOne({
+              where: { id: res.locals.id },
+              include: [{ all: true }]
+            })
+            .then(function afterLoadContextRecord (record) {
+              res.locals.data = record;
+
+              if (record && record.dataValues.creatorId && req.isAuthenticated()) {
+                // ser role owner
+                if (record.isOwner(req.user.id)) {
+                  if(req.userRoleNames.indexOf('owner') == -1 ) req.userRoleNames.push('owner');
+                }
+              }
+
+              done();
+              return null;
+            })
+            .catch(done);
+
+          });
+        },
+
+        preloadGalleryRecord(req, res, done) {
+          if (req.query.galleryId && req.accepts('html')) {
+            // in gallery page:
+            return we.db.models.gallery.findById(req.query.galleryId)
+            .then( (gallery)=> {
+              res.locals.gallery = gallery;
+              done();
+            })
+            .catch(done);
+          }
+
+          done();
+        }
+
+      },
+
       instanceMethods: {
         parseVideoUrl() {
           const r = this;
