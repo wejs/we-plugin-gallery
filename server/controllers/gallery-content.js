@@ -25,7 +25,9 @@ module.exports = {
       }
     }
 
-    if (!res.locals.gallery) return res.notFound();
+    if (!res.locals.gallery && req.accepts('html')) {
+      return res.notFound();
+    }
 
     res.locals.query.order = [
       ['weight', 'DESC'],

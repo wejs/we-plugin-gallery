@@ -14,7 +14,6 @@ module.exports = function(we) {
         formFieldType: 'html',
         formFieldHeight: 200
       },
-
       allowVideo: {
         type: we.db.Sequelize.BOOLEAN,
         defaultValue: true,
