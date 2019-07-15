@@ -9,6 +9,10 @@ module.exports = function(we) {
         type: we.db.Sequelize.STRING(1000),
         allowNull: false
       },
+      date: {
+        type: we.db.Sequelize.DATE,
+        allowNull: true
+      },
       description: {
         type: we.db.Sequelize.TEXT,
         formFieldType: 'html',
@@ -35,6 +39,7 @@ module.exports = function(we) {
     },
     options: {
       titleField: 'name',
+      tableName: 'galleries',
 
       termFields: {
         tags: {

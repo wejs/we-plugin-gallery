@@ -48,6 +48,7 @@ module.exports = function(we) {
     },
     options: {
       titleField: 'name',
+      tableName: 'gallery-contents',
 
       imageFields: {
         image: { formFieldMultiple: false }
