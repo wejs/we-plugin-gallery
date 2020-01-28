@@ -1,13 +1,22 @@
 module.exports = {
-  /**
-   * Default find action
+ /**
+   * Find / query gallery contents
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [get] /gallery-content
+   * description: "Find/query gallery-content list. req.query.galleryId is required for html requests"
+   * responses:
+   *   "200":
+   *     description: "Find/query gallery-content success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
    */
   find(req, res) {
-    const models = req.we.db.models;
-
     if (!req.query.galleryId) {
 
       if (!req.accepts('html')) {
@@ -19,7 +28,6 @@ module.exports = {
           res.locals.metadata.count = record.count;
           res.locals.data = record.rows;
           res.ok();
-          return null;
         })
         .catch(res.queryError);
       }
@@ -40,35 +48,56 @@ module.exports = {
       res.locals.metadata.count = record.count;
       res.locals.data = record.rows;
       res.ok();
-      return null;
     })
     .catch(res.queryError);
   },
 
   /**
-   * Default count action
-   *
+   * gallery-content count action
    * Built for only send count as JSON
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [get] /gallery-content/count
+   * description: "Count gallery-content, set req.query.galleryId for get content count of one gallery"
+   * responses:
+   *   "200":
+   *     description: "Count gallery-content success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         count:
+   *           type: number
+   *           example: 10
    */
   count(req, res) {
     return res.locals.Model
     .count(res.locals.query)
     .then( (count)=> {
       res.status(200).send({ count: count });
-      return null;
     })
     .catch(res.queryError);
   },
+
   /**
-   * Default findOne action
+   * FindOne gallery content action
    *
    * Record is preloaded in context loader by default and is avaible as res.locals.data
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [get] /gallery-content/{gallery-contentId}
+   * description: "FindOne gallery-content by id"
+   * responses:
+   *   "200":
+   *     description: "Find gallery-content by id success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
    */
   findOne(req, res, next) {
     if (!res.locals.data) {
@@ -78,10 +107,21 @@ module.exports = {
     res.ok();
   },
   /**
-   * Create and create page actions
+   * Create and create page actions for gallery content resource
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [post] /gallery-content
+   * description: "Create one gallery-content. req.body.galleryId is required"
+   * responses:
+   *   "201":
+   *     description: "Create one gallery-content"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
    */
   create(req, res) {
     if (!res.locals.template) {
@@ -104,7 +144,6 @@ module.exports = {
       .then(function afterCreate (record) {
         res.locals.data = record;
         res.created();
-        return null;
       })
       .catch(res.queryError);
     } else {
@@ -118,6 +157,17 @@ module.exports = {
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [put] /gallery-content/{gallery-contentId}
+   * description: "Update one gallery-content. By default accepts post, put and update methods"
+   * responses:
+   *   "200":
+   *     description: "Update one by id gallery-content success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
    */
   edit(req, res) {
     if (!res.locals.template) {
@@ -141,7 +191,6 @@ module.exports = {
       .then(function afterUpdate (newRecord) {
         res.locals.data = newRecord;
         res.updated();
-        return null;
       })
       .catch(res.queryError);
     } else {
@@ -153,6 +202,12 @@ module.exports = {
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [delete] /gallery-content/{gallery-contentId}
+   * description: "Delete one gallery-content by id"
+   * responses:
+   *   "204":
+   *     description: "Delete one gallery-content record by id success"
    */
   delete(req, res) {
     if (!res.locals.template) {
@@ -173,7 +228,6 @@ module.exports = {
       .then(function afterDestroy () {
         res.locals.deleted = true;
         res.deleted();
-        return null;
       })
       .catch(res.queryError);
     } else {

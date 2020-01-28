@@ -1,9 +1,20 @@
 module.exports = {
-  /**
+ /**
    * Default find action
    *
    * @param  {Object} req express.js request
    * @param  {Object} res express.js response
+   *
+   * @api [get] /gallery-content
+   * description: "Find/query gallery-content list"
+   * responses:
+   *   "200":
+   *     description: "Find/query gallery-content success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
    */
   find(req, res) {
     const models = req.we.db.models;
@@ -22,11 +33,29 @@ module.exports = {
       res.locals.metadata.count = record.count;
       res.locals.data = record.rows;
       res.ok();
-      return null;
     })
     .catch(res.queryError);
   },
 
+  /**
+   * Default findOne action
+   *
+   * Record is preloaded in context loader by default and is avaible as res.locals.data
+   *
+   * @param  {Object} req express.js request
+   * @param  {Object} res express.js response
+   *
+   * @api [get] /gallery-content/{gallery-contentId}
+   * description: "Find one gallery-content by id"
+   * responses:
+   *   "200":
+   *     description: "Find gallery-content by id success"
+   *     schema:
+   *       type: object
+   *       properties:
+   *         gallery-content:
+   *           $ref: "#/definitions/gallery-content"
+   */
   findOne(req, res) {
     if (!res.locals.data) return res.notFound();
 
