@@ -1,0 +1,48 @@
+<div class="gallery-list">
+  <div class="row">
+    {{#each widget.records}}
+      {{#each contents}}
+        {{#ifCond type 'image'}}
+          <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="gallery-content-wrapper">
+              <div class="gallery-content">
+                {{#each image}}
+                  <a class="gallery-item-teaser"
+                    href="/gallery/{{../../id}}"
+                  >
+                   {{we-image this 'large'}}
+                  </a>
+                {{/each}}
+              </div>
+              <h4><a href="/gallery/{{../id}}">{{../name}}</a></h4>
+            </div>
+          </div>
+        {{/ifCond}}
+        {{#ifCond type 'video'}}
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="gallery-content-wrapper">
+              <div class="gallery-content">
+                <div class="gallery-content-video">
+                  <a
+                    class="gallery-item"
+                    href="/gallery/{{../id}}"
+                    style="background: url({{videoThumbnailUrl}}); background-repeat: no-repeat; background-size: cover; display;"
+                  >
+                    <img src="{{videoThumbnailUrl}}" class="img-thumbnail sr-only">
+                  </a>
+                </div>
+              </div>
+              <h4><a href="/gallery/{{../id}}">{{../name}}</a></h4>
+            </div>
+          </div>
+        {{/ifCond}}
+      {{/each}}
+    {{/each}}
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="view-more">
+  <a href="/collection">{{t 'gallery.view.more'}}</a>
+</div>
